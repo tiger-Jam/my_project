@@ -15,12 +15,16 @@ services:
       - mysql_data:/var/lib/mysql
 
   app:
-    image: python:3.9  # ここを python:3.9 にすればPythonになる
+    image: python:3.9
     platform: linux/arm64
     container_name: app
     restart: always
     volumes:
-      - ./app:/var/www/html
+      - ./app:/app # ソースを /app にマウント
+    working_dir: /app # 作業ディレクトリを /app に
+    command: >
+      sh -c "pip install flask &&
+             python app.py"
 
   nginx:
     image: nginx:latest
